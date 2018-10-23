@@ -1,8 +1,18 @@
 import React from 'react';
 import _ from 'lodash';
-import { StyleSheet, Text, View, Image, TouchableHighlight, Modal } from 'react-native';
+import {
+  Button,
+  Image, 
+  Modal,
+  StyleSheet, 
+  Text, 
+  TouchableHighlight, 
+  View
+} from 'react-native';
 import { sounds } from './sounds'
 import { animals } from './animals'
+import { strings } from './locales/i18n';
+
 
 export default class App extends React.Component {
 
@@ -61,7 +71,7 @@ export default class App extends React.Component {
             <View style={{marginTop: 22}}>
               <View style={styles.modal}>
                 <Text style={styles.titleText}>{
-                  modalAnimal.species
+                  _.upperFirst(strings(`animals.${modalAnimal.species}`))
                 }</Text>
                 <TouchableHighlight onPress={() => {
                     this.playSound(_.sample(sounds[modalAnimal.species]));
@@ -69,12 +79,14 @@ export default class App extends React.Component {
                 <Image source={modalAnimal.img}
                        style={{ width: 400, height: 400 }}/>
                 </TouchableHighlight>
-                <TouchableHighlight
+                <Button
+                  title={_.upperFirst(strings('modal.next_animal'))}
+                  color="#fff"
+                  accessibilityLabel={strings('modal.next_animal')}
                   onPress={() => {
                     this.nextAnimal();
-                  }}>
-                  <Text style={styles.titleText}>Nästa djur</Text>
-                </TouchableHighlight>
+                  }}
+                />
               </View>
             </View>
           </Modal>
@@ -91,7 +103,7 @@ export default class App extends React.Component {
             </TouchableHighlight>
           )
         }
-        <Text style={styles.titleText}>{this.state.targetAnimal.species}</Text>
+        <Text style={styles.titleText}>{_.upperFirst(strings(`animals.${this.state.targetAnimal.species}`))}</Text>
       </View>
     );
   }

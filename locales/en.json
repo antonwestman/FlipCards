@@ -1,0 +1,11 @@
+{
+  "animals": {
+    "horse": "horse",
+    "dog": "dog",
+    "cat": "cat",
+    "monkey": "monkey"
+  },
+  "modal": {
+    "next_animal": "Next animal"
+  }
+}

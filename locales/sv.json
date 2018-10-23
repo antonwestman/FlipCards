@@ -1,0 +1,11 @@
+{
+  "animals": {
+    "horse": "häst",
+    "dog": "hund",
+    "cat": "katt",
+    "monkey": "apa"
+  },
+  "modal": {
+    "next_animal": "Nästa djur"
+  }
+}
