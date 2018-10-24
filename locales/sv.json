@@ -3,9 +3,7 @@
     "horse": "häst",
     "dog": "hund",
     "cat": "katt",
-    "monkey": "apa"
-  },
-  "modal": {
+    "monkey": "apa",
     "next_animal": "Nästa djur"
   }
 }

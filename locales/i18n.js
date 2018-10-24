@@ -1,31 +1,38 @@
-import ReactNative from 'react-native';
-import I18n from 'react-native-i18n';
-
+import i18n from 'i18next';
+import { reactI18nextModule } from 'react-i18next';
+import Expo from 'expo';
 // Import all locales
 import en from './en.json';
 import sv from './sv.json';
 
-// Should the app fallback to English if user locale doesn't exists
-I18n.fallbacks = true;
+// creating a language detection plugin using expo
+// http://i18next.com/docs/ownplugin/#languagedetector
+const languageDetector = {
+  type: 'languageDetector',
+  async: true, // flags below detection to be async
+  detect: (callback) => { return /*'en'; */ Expo.DangerZone.Localization.getPreferredLocalesAsync().then(lng => { callback(lng[0].replace('_', '-')); }) },
+  init: () => {},
+  cacheUserLanguage: () => {}
+}
 
-// Define the supported translations
-I18n.translations = {
-  en,
-  sv
-};
+i18n.use(languageDetector)
+    .use(reactI18nextModule)
+    .init({
+      fallbackLng: 'en',
 
-const currentLocale = I18n.currentLocale();
-console.log(currentLocale)
+      resources: {
+        en: en,
+        sv: sv
+      },
+      ns: ['common'],
+      defaultNS: 'common',
 
-// Is it a RTL language?
-export const isRTL = currentLocale.indexOf('ar') === 0;
+      debug: true,
 
-// Allow RTL alignment in RTL languages
-ReactNative.I18nManager.allowRTL(isRTL);
+      interpolation: {
+        escapeValue: false, // not needed for react as it does escape per default to prevent xss!
+      }
+  });
 
-// The method we'll use instead of a regular string
-export function strings(name, params = {}) {
-  return I18n.t(name, params);
-};
 
-export default I18n;
+export default i18n;

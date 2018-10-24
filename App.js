@@ -1,134 +1,26 @@
 import React from 'react';
-import _ from 'lodash';
-import {
-  Button,
-  Image, 
-  Modal,
-  StyleSheet, 
-  Text, 
-  TouchableHighlight, 
-  View
-} from 'react-native';
-import { sounds } from './sounds'
-import { animals } from './animals'
-import { strings } from './locales/i18n';
+import { withNamespaces } from 'react-i18next';
+import { createStackNavigator } from 'react-navigation';
+import i18n from './locales/i18n';
+import PointAtAnimals from './containers/PointAtAnimals';
 
+const Stack = createStackNavigator({
+  PointAtAnimals: { screen: PointAtAnimals },
+});
 
+// Wrapping a stack with translation hoc asserts we get new render on language change
+// the hoc is set to only trigger rerender on languageChanged
+const WrappedStack = ({ t }) => <Stack screenProps={{ t }} />;
+const ReloadAppOnLanguageChange = withNamespaces('common', {
+  bindI18n: 'languageChanged',
+  bindStore: false,
+})(WrappedStack);
+
+// The entry point using a react navigation stack navigation
+// gets wrapped by the I18nextProvider enabling using translations
+// https://github.com/i18next/react-i18next#i18nextprovider
 export default class App extends React.Component {
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      targetAnimal: this.targetAnimal(),
-    }
-  }
-
-  nextAnimal(){
-    this.setState(
-      {
-        targetAnimal: this.targetAnimal(),
-        modalAnimal: undefined,
-      }
-    )
-  }
-
-  onClick = (event, animal) => {
-    if (this.state.targetAnimal.species !== animal.species){
-      this.playSound(_.sample(sounds[animal.species]))
-    } else {
-      setTimeout(() => { this.playSound(_.sample(sounds[animal.species])) }, 1100);
-      this.playSound(_.sample(sounds.goodWork))
-      this.setState(previousState => {
-        return {
-          modalAnimal: animal
-        };
-      });
-    }
-  }
-
-  playSound = async (sound) => {
-    const soundObject = new Expo.Audio.Sound();
-    await soundObject.loadAsync(sound);
-    await soundObject.playAsync();
-  }
-
-  sampleAnimals = () => animals.map((a) => [Math.random(),a])
-                               .sort((a,b) => a[0]-b[0])
-                               .map((a) => a[1])
-                               .slice(4);
-
-  targetAnimal = () => _.sample(this.sampleAnimals())
-
   render() {
-    const modalAnimal = this.state.modalAnimal
-    return (
-      <View style={styles.container}>
-        { modalAnimal &&
-          <Modal
-            animationType="slide"
-            transparent={false}
-            >
-            <View style={{marginTop: 22}}>
-              <View style={styles.modal}>
-                <Text style={styles.titleText}>{
-                  _.upperFirst(strings(`animals.${modalAnimal.species}`))
-                }</Text>
-                <TouchableHighlight onPress={() => {
-                    this.playSound(_.sample(sounds[modalAnimal.species]));
-                }}>
-                <Image source={modalAnimal.img}
-                       style={{ width: 400, height: 400 }}/>
-                </TouchableHighlight>
-                <Button
-                  title={_.upperFirst(strings('modal.next_animal'))}
-                  color="#fff"
-                  accessibilityLabel={strings('modal.next_animal')}
-                  onPress={() => {
-                    this.nextAnimal();
-                  }}
-                />
-              </View>
-            </View>
-          </Modal>
-        }
-        {
-          this.sampleAnimals().map(animal => 
-            <TouchableHighlight key={animal['id']} onPress={
-              (e) => {
-                return this.onClick(e, animal)
-              }
-            }>
-              <Image source={animal['img']}
-                     style={{ width: 100, height: 100 }}/>
-            </TouchableHighlight>
-          )
-        }
-        <Text style={styles.titleText}>{_.upperFirst(strings(`animals.${this.state.targetAnimal.species}`))}</Text>
-      </View>
-    );
+    return <ReloadAppOnLanguageChange />;
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 20,
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    backgroundColor: '#000',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    height: '100%'
-  },
-  modal: {
-    backgroundColor: '#000',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    height: '100%'
-  },
-  titleText: {
-    fontSize: 50,
-    fontWeight: 'bold',
-    marginTop: 20,
-    color: '#fff'
-  }
-});
