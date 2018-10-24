@@ -5,5 +5,8 @@
     "cat": "katt",
     "monkey": "apa",
     "next_animal": "Nästa djur"
+  },
+  "routes": {
+    "find_the_animal": "Hitta djuret"
   }
 }

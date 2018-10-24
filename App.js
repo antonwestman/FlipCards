@@ -11,7 +11,7 @@ const Stack = createStackNavigator({
 // Wrapping a stack with translation hoc asserts we get new render on language change
 // the hoc is set to only trigger rerender on languageChanged
 const WrappedStack = ({ t }) => <Stack screenProps={{ t }} />;
-const ReloadAppOnLanguageChange = withNamespaces('common', {
+const ReloadAppOnLanguageChange = withNamespaces('routes', {
   bindI18n: 'languageChanged',
   bindStore: false,
 })(WrappedStack);

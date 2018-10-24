@@ -16,6 +16,11 @@ import { withNamespaces } from 'react-i18next';
 
 
 class PointAtAnimals extends React.Component {
+  static navigationOptions = ({ screenProps }) => {
+    return {
+      title: screenProps.t('find_the_animal')
+    };
+  }
 
   constructor(props) {
     super(props)
@@ -56,7 +61,7 @@ class PointAtAnimals extends React.Component {
   sampleAnimals = () => animals.map((a) => [Math.random(),a])
                                .sort((a,b) => a[0]-b[0])
                                .map((a) => a[1])
-                               .slice(4);
+                               .slice(8);
 
   targetAnimal = () => _.sample(this.sampleAnimals())
 
@@ -129,9 +134,9 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 50,
     fontWeight: 'bold',
-    marginTop: 5,
+    marginTop: 30,
     color: '#fff'
   }
 });
 
-export default withNamespaces(['animals', 'common'], { wait: true })(PointAtAnimals);
+export default withNamespaces(['animals', 'routes'], { wait: true })(PointAtAnimals);

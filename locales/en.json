@@ -5,5 +5,8 @@
     "cat": "cat",
     "monkey": "monkey",
     "next_animal": "Next animal"
+  },
+  "routes": {
+    "find_the_animal": "Find the animal"
   }
 }
