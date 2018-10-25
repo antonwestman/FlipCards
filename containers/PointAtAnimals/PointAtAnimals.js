@@ -1,15 +1,14 @@
 import React from 'react';
 import _ from 'lodash';
 import {
-  Button,
   Image, 
   Modal,
   StyleSheet, 
   Text, 
-  TouchableHighlight, 
+  TouchableOpacity, 
   View
 } from 'react-native';
-import { animalSounds } from './animalSounds'
+import { animalSounds, localAnimalWord } from './animalSounds'
 import { localSuccess } from '../../locales/sounds'
 import { animals } from './animals'
 import { withNamespaces } from 'react-i18next';
@@ -24,14 +23,23 @@ class PointAtAnimals extends React.Component {
 
   constructor(props) {
     super(props)
+
+    const animals = this.sampleAnimals()
+    const target = _.sample(animals)
+
     this.state = {
-      targetAnimal: this.targetAnimal(),
+      sampleAnimals: animals,
+      targetAnimal: target,
     }
   }
 
   nextAnimal(){
+    const animals = this.sampleAnimals()
+    const target = _.sample(animals)
+
     this.setState(
       {
+        sampleAnimals: animals,
         targetAnimal: this.targetAnimal(),
         modalAnimal: undefined,
       }
@@ -44,7 +52,7 @@ class PointAtAnimals extends React.Component {
     } else {
       setTimeout(() => { this.playSound(localSuccess()) }, 1100);
       this.playSound(_.sample(animalSounds[animal.species]))
-      this.setState(previousState => {
+      this.setState(() => {
         return {
           modalAnimal: animal
         };
@@ -58,16 +66,13 @@ class PointAtAnimals extends React.Component {
     await soundObject.playAsync();
   }
 
-  sampleAnimals = () => animals.map((a) => [Math.random(),a])
-                               .sort((a,b) => a[0]-b[0])
-                               .map((a) => a[1])
-                               .slice(8);
+  sampleAnimals = () => _.sampleSize(animals, 15)
 
   targetAnimal = () => _.sample(this.sampleAnimals())
 
   render() {
     const { t, i18n } = this.props;
-    const modalAnimal = this.state.modalAnimal
+    const { sampleAnimals, targetAnimal, modalAnimal } = this.state
     return (
       <View style={styles.container}>
         { modalAnimal &&
@@ -77,40 +82,44 @@ class PointAtAnimals extends React.Component {
             >
             <View style={{marginTop: 22}}>
               <View style={styles.modal}>
-                <Text style={styles.titleText}>{
-                  _.upperFirst(t(`${modalAnimal.species}`))
-                }</Text>
-                <TouchableHighlight onPress={() => {
+                <TouchableOpacity onPress={ () =>
+                  this.playSound(localAnimalWord(modalAnimal.species))}>
+                  <Text style={styles.titleText}>{_.upperFirst(t(`${modalAnimal.species}`))}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {
                     this.playSound(_.sample(animalSounds[modalAnimal.species]));
                 }}>
                 <Image source={modalAnimal.img}
-                       style={{ width: 400, height: 400 }}/>
-                </TouchableHighlight>
-                <Button
-                  title={_.upperFirst(t('next_animal'))}
-                  color="#fff"
+                       style={styles.modalImage}/>
+                </TouchableOpacity>
+                <TouchableOpacity
                   accessibilityLabel={t('next_animal')}
                   onPress={() => {
                     this.nextAnimal();
                   }}
-                />
+                >
+                  <Text style={styles.titleText}>{_.upperFirst(t('next_animal'))}</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </Modal>
         }
         {
-          this.sampleAnimals().map(animal => 
-            <TouchableHighlight key={animal['id']} onPress={
+          sampleAnimals.map(animal => 
+            <TouchableOpacity key={animal['id']} onPress={
               (e) => {
                 return this.onClick(e, animal)
               }
             }>
               <Image source={animal['img']}
-                     style={{ width: 100, height: 100 }}/>
-            </TouchableHighlight>
+                     style={styles.smallImage}/>
+            </TouchableOpacity>
           )
         }
-        <Text style={styles.titleText}>{_.upperFirst(t(`${this.state.targetAnimal.species}`))}</Text>
+        <TouchableOpacity onPress={ () =>
+          this.playSound(localAnimalWord(targetAnimal.species))}>
+          <Text style={styles.titleText}>{_.upperFirst(t(`${targetAnimal.species}`))}</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -120,13 +129,13 @@ const styles = StyleSheet.create({
   container: {
     flexWrap: 'wrap',
     flexDirection: 'row',
-    backgroundColor: '#000',
     justifyContent: 'center',
     alignItems: 'flex-start',
     height: '100%'
   },
   modal: {
-    backgroundColor: '#000',
+    flexWrap: 'wrap',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'flex-start',
     height: '100%'
@@ -134,8 +143,16 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 50,
     fontWeight: 'bold',
-    marginTop: 30,
-    color: '#fff'
+    marginTop: 10,
+  },
+  smallImage: {
+    width: 110,
+    height: 110,
+    margin: 2,
+  },
+  modalImage: {
+    width: 350,
+    height: 350
   }
 });
 
