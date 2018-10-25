@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "FlipCards",
-    "description": "Point at animals",
-    "slug": "FlipCards",
+    "name": "My Digital Zoo",
+    "description": "Listen to, look at and find animals",
+    "slug": "find-the-animal",
     "privacy": "public",
     "sdkVersion": "30.0.0",
     "platforms": ["ios", "android"],
@@ -21,7 +21,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.tidelipom.findtheanimal"
     }
   }
 }
