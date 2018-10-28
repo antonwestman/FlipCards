@@ -4,6 +4,7 @@ import _ from 'lodash';
 const success = {
   en: [require('../assets/sounds/success/en/1.mp3')],
   sv: [
+    require('../assets/sounds/success/sv/female-adult-well-done.mp3'),
     require('../assets/sounds/success/sv/female-child-nice.mp3'),
     require('../assets/sounds/success/sv/female-child-sweet.mp3'),
     require('../assets/sounds/success/sv/female-child-woho.mp3'),

@@ -95,4 +95,22 @@ const horses = [
       img: require("../../assets/images/horse-4.jpeg") }
   ]
 
-export const animals = [...cats, ...dogs, ...monkies, ...horses]
+const cows = [
+    { id: 'cow-1',
+      species: 'cow',
+      img: require("../../assets/images/cow-1.jpeg") },
+    { id: 'cow-2',
+      species: 'cow',
+      img: require("../../assets/images/cow-2.jpeg") },
+    { id: 'cow-3',
+      species: 'cow',
+      img: require("../../assets/images/cow-3.jpeg") },
+    { id: 'cow-4',
+      species: 'cow',
+      img: require("../../assets/images/cow-4.jpeg") },
+    { id: 'cow-5',
+      species: 'cow',
+      img: require("../../assets/images/cow-5.jpeg") }
+  ]
+
+export const animals = [...cats, ...dogs, ...monkies, ...horses, ...cows]

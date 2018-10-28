@@ -4,6 +4,7 @@
     "dog": "hund",
     "cat": "katt",
     "monkey": "apa",
+    "cow": "ko",
     "next_animal": "Nästa djur"
   },
   "routes": {

@@ -185,7 +185,7 @@ class PointAtAnimals extends React.Component {
                         fontWeight: '300'
                       }}
                     >
-                      {_.upperCase(t('next_animal'))}
+                      {t('next_animal').toUpperCase()}
                     </Text>
                   </TouchableOpacity>
                 </View>
