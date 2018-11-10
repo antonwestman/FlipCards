@@ -2,7 +2,7 @@ import i18n from 'i18next';
 import _ from 'lodash';
 
 const success = {
-  en: [require('../assets/sounds/success/en/1.mp3')],
+  // en: [require('../assets/sounds/success/en/1.mp3')],
   sv: [
     require('../assets/sounds/success/sv/female-adult-well-done.mp3'),
     require('../assets/sounds/success/sv/female-child-nice.mp3'),
@@ -17,6 +17,7 @@ const success = {
 }
 
 export function localSuccess() {
-  const language = i18n.languages[0].split('-')[0]
+  const preferredLanguage = i18n.languages[0].split('-')[0]
+  const language = _.keys(success).includes(preferredLanguage) ? preferredLanguage : 'sv'
   return _.sample(success[language])
 }

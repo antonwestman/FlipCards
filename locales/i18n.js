@@ -18,10 +18,10 @@ const languageDetector = {
 i18n.use(languageDetector)
     .use(reactI18nextModule)
     .init({
-      fallbackLng: 'en',
+      fallbackLng: 'sv',
 
       resources: {
-        en: en,
+        // en: en, 
         sv: sv
       },
       ns: ['common'],

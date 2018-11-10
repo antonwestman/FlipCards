@@ -31,12 +31,13 @@ export const animalSounds = {
 
 // TODO: Insert english words
 const animalWords = {
-  en: {
-    dog: [require('../../assets/sounds/cows/1.mp3')],
-    cat: [require('../../assets/sounds/cows/1.mp3')],
-    horse: [require('../../assets/sounds/cows/1.mp3')],
-    monkey: [require('../../assets/sounds/cows/1.mp3')]
-  },
+  // en: {
+  //   dog: [require('../../assets/sounds/cows/1.mp3')],
+  //   cat: [require('../../assets/sounds/cows/1.mp3')],
+  //   horse: [require('../../assets/sounds/cows/1.mp3')],
+  //   monkey: [require('../../assets/sounds/cows/1.mp3')],
+  //   cow: [require('../../assets/sounds/cows/1.mp3')]
+  // },
   sv: {
     dog: [
       require('../../assets/sounds/spoken/dog/sv/female-child-1.mp3'),
@@ -91,6 +92,7 @@ const animalWords = {
 }
 
 export function localAnimalWord(species) {
-  const language = i18n.languages[0].split('-')[0]
+  const preferredLanguage = i18n.languages[0].split('-')[0]
+  const language = _.keys(animalWords).includes(preferredLanguage) ? preferredLanguage : 'sv'
   return _.sample(animalWords[language][species])
 }

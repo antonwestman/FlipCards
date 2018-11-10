@@ -42,10 +42,11 @@ class PointAtAnimals extends React.Component {
     this.setState(
       {
         sampleAnimals: animals,
-        targetAnimal: this.targetAnimal(),
+        targetAnimal: target,
         modalAnimal: undefined,
       }
     )
+    setTimeout(() => { this.playSound(localAnimalWord(target.species))}, 600);
   }
 
   onClick = (event, animal) => {
@@ -69,8 +70,6 @@ class PointAtAnimals extends React.Component {
   }
 
   sampleAnimals = () => _.sampleSize(animals, 12)
-
-  targetAnimal = () => _.sample(this.sampleAnimals())
 
   getNavBarHeight() {
     if (Platform.OS == 'ios') {
@@ -169,9 +168,9 @@ class PointAtAnimals extends React.Component {
                       this.nextAnimal();
                     }}
                     style={{
-                      width: '100%',
+                      width: '90%',
                       borderWidth: 2,
-                      borderRadius:2,
+                      borderRadius:10,
                       justifyContent: 'center',
                       alignItems: 'center',
                       backgroundColor: 'skyblue'
