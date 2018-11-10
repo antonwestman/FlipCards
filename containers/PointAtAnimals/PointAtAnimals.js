@@ -1,7 +1,9 @@
 import React from 'react';
 import _ from 'lodash';
 import {
+  Animated,
   Dimensions,
+  Easing,
   Image, 
   Modal,
   Platform, 
@@ -25,14 +27,29 @@ class PointAtAnimals extends React.Component {
   constructor(props) {
     super(props)
 
-    const animals = this.sampleAnimals()
-    const target = _.sample(animals)
-
     this.state = {
-      sampleAnimals: animals,
-      targetAnimal: target,
+      sampleAnimals: {},
+      targetAnimal: {},
     }
+
     this.navbarHight = this.getNavBarHeight()
+    this.animated = new Animated.Value(0)
+  }
+
+  animate () {
+    this.animated.setValue(0)
+    Animated.timing(
+      this.animated,
+      {
+        toValue: 1,
+        duration: 800,
+        easing: Easing.linear
+      }
+    ).start()
+  }
+
+  componentDidMount(){
+    this.nextAnimal()
   }
 
   nextAnimal(){
@@ -46,7 +63,10 @@ class PointAtAnimals extends React.Component {
         modalAnimal: undefined,
       }
     )
-    setTimeout(() => { this.playSound(localAnimalWord(target.species))}, 600);
+    setTimeout(() => {
+      this.playSound(localAnimalWord(target.species))
+      this.animate()
+    }, 600);
   }
 
   onClick = (event, animal) => {
@@ -88,6 +108,10 @@ class PointAtAnimals extends React.Component {
   render() {
     const { t, i18n } = this.props;
     const { sampleAnimals, targetAnimal, modalAnimal } = this.state
+    const fontSize = this.animated.interpolate({
+      inputRange:[0, 0.5, 1],
+      outputRange:[50,55,50]
+    })
     return (
         <View style={{
           flex: 1,
@@ -208,7 +232,7 @@ class PointAtAnimals extends React.Component {
                 this.playSound(_.sample(animalSounds[targetAnimal.species]))
               }
             >
-              <Text style={{letterSpacing: 4, fontSize: 50}}>{_.upperFirst(t(`${targetAnimal.species}`))}</Text>
+              <Animated.Text style={{letterSpacing: 4, ...{fontSize}}}>{_.upperFirst(t(`${targetAnimal.species}`))}</Animated.Text>
             </TouchableOpacity>
           </View>
           <View style={{
